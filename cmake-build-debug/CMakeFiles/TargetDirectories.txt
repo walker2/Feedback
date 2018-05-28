@@ -1,4 +1,4 @@
-/home/andrew/CLionProjects/Feedback/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/andrew/CLionProjects/Feedback/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/andrew/CLionProjects/Feedback/cmake-build-debug/CMakeFiles/Feedback.dir
-/home/andrew/CLionProjects/Feedback/cmake-build-debug/CMakeFiles/Feedback_autogen.dir
+/home/andrew/Git/Feedback/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/andrew/Git/Feedback/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/andrew/Git/Feedback/cmake-build-debug/CMakeFiles/Feedback.dir
+/home/andrew/Git/Feedback/cmake-build-debug/CMakeFiles/Feedback_automoc.dir

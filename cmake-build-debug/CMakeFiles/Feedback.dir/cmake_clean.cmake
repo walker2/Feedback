@@ -1,9 +1,8 @@
 file(REMOVE_RECURSE
-  "Feedback_autogen"
-  "CMakeFiles/Feedback_autogen.dir/AutogenOldSettings.cmake"
+  "Feedback_automoc.cpp"
   "CMakeFiles/Feedback.dir/Feedback/main.cpp.o"
   "CMakeFiles/Feedback.dir/Feedback/qcustomplot.cpp.o"
-  "CMakeFiles/Feedback.dir/Feedback_autogen/mocs_compilation.cpp.o"
+  "CMakeFiles/Feedback.dir/Feedback_automoc.cpp.o"
   "Feedback.pdb"
   "Feedback"
 )

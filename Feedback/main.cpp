@@ -30,10 +30,10 @@ void plot(std::vector<double> &x, std::vector<double> &y, QCustomPlot *plot, QCo
     plot->graph(plotNum)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2));
     plot->graph(plotNum)->setData(X, Y);
 
-    plot->graph(plotNum)->rescaleAxes();
+    plot->rescaleAxes();
     plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
-    plot->show();
+    //plot->show();
 }
 
 float AvgInWaitingAlgorithm(float p, int64_t numberOfMessages, int maxNumber = 0, float p_rcp = 0) {
@@ -178,26 +178,27 @@ float UsageInReturnAlgorithm(float p, float tau, int64_t numberOfMessages) {
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     /* 2.1 Среднее число передач в алгоритме с ожиданием при неограниченном числе повторных передач */
-    two_one();
+   // two_one();
 
     /* 2.2 Среднее число передач в алгоритме с ожиданием при ограниченном числе повторных передач */
-    two_two();
+    //two_two();
 
     /* 2.3 Среднее число передач в алгоритме с ожиданием при наличии ошибок в обратном канал с неогр. и огр. повт. передач*/
-    two_three_a();
+    //two_three_a();
 
-    two_three_b();
+    //two_three_b();
 
     /* 2.4 Определение коэффициента использования канала при τ > 0 для алгоритма с ожиданием   `*/
-    two_four();
+    //two_four();
 
     /* 2.5 Моделирование алгоритма с возвратом */
     two_five();
 
-    a.exec();
+    //a.exec();
 }
 
 void two_five() {
+    std::cout << "2.5" << std::endl;
     int count = 0;
 
     auto firstPlot = new QCustomPlot();
@@ -206,21 +207,29 @@ void two_five() {
     {
         std::vector<double> p_vec;
         std::vector<double> usage_vec_ex;
-        for (double p = 0.05; p < 1; p += 0.05)
+        std::vector<double> usage_vec_th;
+        for (double p = 0.05; p < 0.9; p += 0.05)
         {
+            //std::cout << "tau=" << tau << " p=" << p << std::endl;
             p_vec.push_back(p);
-            usage_vec_ex.push_back(UsageInReturnAlgorithm(p, tau, 100000));
+            usage_vec_ex.push_back(UsageInReturnAlgorithm(p, tau, 10000));
+            usage_vec_th.push_back((1 - p) / (float) (1 + p * tau));
         }
         std::string name = "tau = " + std::to_string(tau);
+        std::string name_th = "tau = " + std::to_string(tau) + " th";
         plot(p_vec, usage_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name);
+        plot(p_vec, usage_vec_th, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name_th);
     }
-   /* float p5 = 0.4f;
+
+    firstPlot->savePng("2_5.png");
+    /* float p5 = 0.4f;
     float tau5 = 3;
     std::cout << "Usage koeff:\t\t" << UsageInReturnAlgorithm(p5, tau5, 10) << std::endl;
     std::cout << "Should be:\t\t" << (1 - p5) / (1 + p5 * tau5) << std::endl;*/
 }
 
 void two_four() {
+    std::cout << "2.4" << std::endl;
     int count = 0;
 
     auto firstPlot = new QCustomPlot();
@@ -229,14 +238,20 @@ void two_four() {
     {
         std::vector<double> p_vec;
         std::vector<double> usage_vec_ex;
+        std::vector<double> usage_vec_th;
         for (double p = 0.05; p < 1; p += 0.05)
         {
             p_vec.push_back(p);
-            usage_vec_ex.push_back(UsageInWaitingAlgorithm(p, tau, 100000));
+            usage_vec_ex.push_back(UsageInWaitingAlgorithm(p, tau, 10000));
+            usage_vec_th.push_back((1 - p) / (float) (1 + tau));
+
         }
         std::string name = "tau = " + std::to_string(tau);
+        std::string name_th = "tau = " + std::to_string(tau) + " th";
         plot(p_vec, usage_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name);
+        plot(p_vec, usage_vec_th, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name_th);
     }
+    firstPlot->savePng("2_4.png");
     /*float p4 = 0.5f;
     float tau4 = 2;
 
@@ -245,6 +260,7 @@ void two_four() {
 }
 
 void two_three_b() {
+    std::cout << "2.3_b" << std::endl;
     int n = 150;
     int count = 0;
     auto firstPlot = new QCustomPlot();
@@ -255,12 +271,14 @@ void two_three_b() {
         std::vector<double> n_vec_th;
         for (double p = 0.05; p < 1; p += 0.05) {
             p_vec.push_back(p);
-            n_vec_ex.push_back(AvgInWaitingAlgorithm(p, 100000, n, p_rcp));
+            n_vec_ex.push_back(AvgInWaitingAlgorithm(p, 10000, n, p_rcp));
             n_vec_th.push_back(1 / ((1 - p) * (1 - p_rcp)));
         }
         std::string name = "p_rcp = " + std::to_string(p_rcp) + " with n = " + std::to_string(n);
         plot(p_vec, n_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name);
     }
+    firstPlot->savePng("2_3_b.png");
+
     /*float p3_2 = 0.3f;
     float p3_2_rcp = 0.11f;
     float n3 = 8;
@@ -269,6 +287,7 @@ void two_three_b() {
 }
 
 void two_three_a() {
+    std::cout << "2.3_a" << std::endl;
     int count = 0;
     auto firstPlot = new QCustomPlot();
     firstPlot->setWindowTitle("2.3 (a)");
@@ -278,13 +297,13 @@ void two_three_a() {
         std::vector<double> n_vec_th;
         for (double p = 0.05; p < 1; p += 0.05) {
             p_vec.push_back(p);
-            n_vec_ex.push_back(AvgInWaitingAlgorithm(p, 100000, 0, p_rcp));
+            n_vec_ex.push_back(AvgInWaitingAlgorithm(p, 10000, 0, p_rcp));
             n_vec_th.push_back(1 / ((1 - p) * (1 - p_rcp)));
         }
         std::string name = "p_rcp = " + std::to_string(p_rcp);
         plot(p_vec, n_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name);
     }
-
+    firstPlot->savePng("2_3_a.png");
     /*float p3_1 = 0.4f;
     float p3_1_rcp = 0.2f;
     std::cout << "Waiting, unlimited, p_rcp:\t" << AvgInWaitingAlgorithm(p3_1, 100000, 0, p3_1_rcp) << std::endl;
@@ -292,6 +311,7 @@ void two_three_a() {
 }
 
 void two_two() {
+    std::cout << "2.2" << std::endl;
     int count = 0;
     auto firstPlot = new QCustomPlot();
     firstPlot->setWindowTitle("2.2");
@@ -301,13 +321,13 @@ void two_two() {
         std::vector<double> n_vec_th;
         for (double i = 0.05; i < 1; i += 0.05) {
             p_vec.push_back(i);
-            n_vec_ex.push_back(AvgInWaitingAlgorithm(i, 100000, n));
+            n_vec_ex.push_back(AvgInWaitingAlgorithm(i, 10000, n));
             n_vec_th.push_back((1 - std::pow(i, n)) / (1 - i));
         }
         std::string name = "n = " + std::to_string(n);
         plot(p_vec, n_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue + count), count++, name);
     }
-
+    firstPlot->savePng("2_2.png");
     /*float p2 = 0.8f;
     float n2 = 2;
     std::cout << "Waiting, limited:\t\t" << AvgInWaitingAlgorithm(p2, 100000, n2) << std::endl;
@@ -315,6 +335,7 @@ void two_two() {
 }
 
 void two_one() {
+    std::cout << "2.1" << std::endl;
     std::vector<double> p_vec;
     std::vector<double> n_vec_ex;
     std::vector<double> n_vec_th;
@@ -322,12 +343,12 @@ void two_one() {
     firstPlot->setWindowTitle("2.1");
     for (double i = 0.05; i < 1; i += 0.05) {
         p_vec.push_back(i);
-        n_vec_ex.push_back(AvgInWaitingAlgorithm(i, 100000));
+        n_vec_ex.push_back(AvgInWaitingAlgorithm(i, 10000));
         n_vec_th.push_back(1 / (1 - i));
     }
     plot(p_vec, n_vec_ex, firstPlot, Qt::GlobalColor(Qt::blue), 0, "Experimental");
     plot(p_vec, n_vec_ex, firstPlot, Qt::GlobalColor(Qt::red), 1, "Theoretical");
-
+    firstPlot->savePng("2_1.png");
     /*float p1 = 0.8f;
     std::cout << "Waiting, unlimited:\t\t" << AvgInWaitingAlgorithm(p1, 100000) << std::endl;
     std::cout << "Should be:\t\t" << 1 / (1 - p1) << std::endl;*/

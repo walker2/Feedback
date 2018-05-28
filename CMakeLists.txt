@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(Feedback)
 
-set(CMAKE_PREFIX_PATH $ENV{HOME}/Qt/5.10.0/gcc_64)
+set(CMAKE_PREFIX_PATH $ENV{HOME}/Qt/5.5/gcc)
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
